@@ -14,3 +14,14 @@ variable "replication_config" {
     registry_id = ""
   }
 }
+
+variable "replication_policy" {
+  type = object({
+    account_id = string
+    region     = string
+  })
+  default = {
+    account_id = ""
+    region     = "us-east-1"
+  }
+}

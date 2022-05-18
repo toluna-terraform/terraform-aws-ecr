@@ -7,7 +7,7 @@ This module creates ECR repository, IAM role and replication configuration (opti
 ## Usage
 ```hcl
 module "ecr" {
-  source              = "toluna-terraform/terraform-aws-ecr"
+  source              = "toluna-terraform/ecr/aws"
   version             = "~>0.0.1" // Change to the required version.
   repo_name           = "example"
   replication_config  = {
