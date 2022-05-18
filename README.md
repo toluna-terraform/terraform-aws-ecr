@@ -1,4 +1,4 @@
-# terraform-aws-ecs
+# terraform-aws-ecr
 Toluna terraform module for AWS ECR
 
 ## Description
