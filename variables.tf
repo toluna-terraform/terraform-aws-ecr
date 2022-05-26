@@ -18,7 +18,7 @@ variable "replication_config" {
 variable "replication_policy" {
   type = object({
     account_id = string
-      region     = string
+    region     = string
   })
   default = {
     account_id = ""
