@@ -32,23 +32,27 @@ resource "aws_ecr_repository_policy" "main" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "adds full ecr access to the ${var.repo_name} repository",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:BatchGetImage",
-                "ecr:CompleteLayerUpload",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetLifecyclePolicy",
-                "ecr:InitiateLayerUpload",
-                "ecr:PutImage",
-                "ecr:UploadLayerPart",
-                "ecr:ReplicateImage",
-                "ecr:CreateRepository"
-            ]
+          "Sid": "adds full ecr access to the ${var.repo_name} repository",
+          "Effect": "Allow",
+          "Principal": ${var.principal},
+          "Action": [
+              "ecr:BatchCheckLayerAvailability",
+              "ecr:BatchGetImage",
+              "ecr:CompleteLayerUpload",
+              "ecr:GetDownloadUrlForLayer",
+              "ecr:GetLifecyclePolicy",
+              "ecr:InitiateLayerUpload",
+              "ecr:PutImage",
+              "ecr:UploadLayerPart",
+              "ecr:ReplicateImage",
+              "ecr:CreateRepository",
+              "ecr:DescribeImages",
+              "ecr:DescribeRepositories",
+              "ecr:GetRepositoryPolicy",
+              "ecr:ListImages"
+          ]
         }
-        ]
+      ]
     }
     EOF
 }

@@ -25,3 +25,7 @@ variable "replication_policy" {
     region     = "us-east-1"
   }
 }
+
+variable "principal" {
+  default = "\"*\""
+}
