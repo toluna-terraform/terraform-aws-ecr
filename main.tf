@@ -1,5 +1,12 @@
+locals {
+  repo_name          = var.repo_name == null ? var.ecr_config.repo_name : var.repo_name
+  replication_config = var.replication_config == null ? var.ecr_config.replication_config : var.replication_config
+  replication_policy = var.replication_config == null ? var.ecr_config.replication_policy : var.replication_policy
+  principal          = var.principal == null ? var.ecr_config.principal : var.principal
+}
+
 resource "aws_ecr_repository" "main" {
-  name = var.repo_name
+  name = local.repo_name
 }
 
 resource "aws_ecr_lifecycle_policy" "main" {
@@ -32,9 +39,9 @@ resource "aws_ecr_repository_policy" "main" {
     "Version": "2012-10-17",
     "Statement": [
         {
-          "Sid": "adds full ecr access to the ${var.repo_name} repository",
+          "Sid": "adds full ecr access to the ${local.repo_name} repository",
           "Effect": "Allow",
-          "Principal": ${var.principal},
+          "Principal": ${local.principal},
           "Action": [
               "ecr:BatchCheckLayerAvailability",
               "ecr:BatchGetImage",
@@ -58,12 +65,12 @@ resource "aws_ecr_repository_policy" "main" {
 }
 
 resource "aws_ecr_replication_configuration" "main" {
-  count = var.replication_config.enabled ? 1 : 0
+  count = local.replication_config.enabled ? 1 : 0
   replication_configuration {
     rule {
       destination {
-        region      = var.replication_config.region
-        registry_id = var.replication_config.registry_id
+        region      = local.replication_config.region
+        registry_id = local.replication_config.registry_id
       }
     }
   }
@@ -72,23 +79,23 @@ resource "aws_ecr_replication_configuration" "main" {
 data "aws_caller_identity" "this" {}
 
 data "aws_iam_policy_document" "replication" {
-  count = var.replication_policy.account_id != "" ? 1 : 0
+  count = local.replication_policy.account_id != "" ? 1 : 0
   statement {
     sid    = "${var.repo_name}-replication-access"
     effect = "Allow"
     principals {
-      identifiers = ["arn:aws:iam::${var.replication_policy.account_id}:root"]
+      identifiers = ["arn:aws:iam::${local.replication_policy.account_id}:root"]
       type        = "AWS"
     }
     actions = [
       "ecr:CreateRepository",
       "ecr:ReplicateImage"
     ]
-    resources = ["arn:aws:ecr:${var.replication_policy.region}:${data.aws_caller_identity.this.id}:repository/${var.repo_name}"]
+    resources = ["arn:aws:ecr:${local.replication_policy.region}:${data.aws_caller_identity.this.id}:repository/${local.repo_name}"]
   }
 }
 
 resource "aws_ecr_registry_policy" "this" {
-  count  = var.replication_policy.account_id != "" ? 1 : 0
+  count  = local.replication_policy.account_id != "" ? 1 : 0
   policy = data.aws_iam_policy_document.replication[0].json
 }
