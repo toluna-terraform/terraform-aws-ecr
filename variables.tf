@@ -1,11 +1,9 @@
 variable "ecr_config" {
-  #type = map(string)
 }
 
 variable "repo_name" {
   type     = string
   default  = null
-  nullable = true
 }
 
 variable "replication_config" {
@@ -15,7 +13,6 @@ variable "replication_config" {
     registry_id = string
   })
   default  = null
-  nullable = true
 }
 
 variable "replication_policy" {
@@ -24,11 +21,9 @@ variable "replication_policy" {
     region     = string
   })
   default  = null
-  nullable = true
 }
 
 variable "principal" {
   type     = string
   default  = null
-  nullable = true
 }
